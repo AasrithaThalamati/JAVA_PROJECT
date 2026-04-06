@@ -1,0 +1,139 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class SmartHybridSeries {
+
+    public static boolean isPrime(int n) {
+        if (n < 2) return false;
+        if (n == 2) return true;
+        if (n % 2 == 0) return false;
+        for (int i = 3; i <= Math.sqrt(n); i += 2)
+            if (n % i == 0) return false;
+        return true;
+    }
+
+    public static int getNthPrime(int n) {
+        int count = 0, num = 1;
+        while (count < n) { num++; if (isPrime(num)) count++; }
+        return num;
+    }
+
+    public static long fibonacci(int n) {
+        if (n <= 1) return n;
+        long a = 0, b = 1;
+        for (int i = 2; i <= n; i++) { long t = a + b; a = b; b = t; }
+        return b;
+    }
+
+    public static long digitSum(long n) {
+        long s = 0;
+        while (n > 0) { s += n % 10; n /= 10; }
+        return s;
+    }
+
+    public static long reverseNum(long n) {
+        long r = 0;
+        while (n > 0) { r = r * 10 + n % 10; n /= 10; }
+        return r;
+    }
+
+    public static boolean isPerfectSquare(long n) {
+        long r = (long) Math.sqrt(n);
+        return r * r == n;
+    }
+
+    public static boolean isEven(long n) { return n % 2 == 0; }
+
+    public static long squareRoot(long n) { return (long) Math.sqrt(n); }
+
+    public static long cubeRoot(long n) { return Math.round(Math.cbrt(n)); }
+
+    public static List<Long> generateSeries(int terms) {
+        List<Long> series = new ArrayList<>();
+        long a = 1, b = 1;
+        for (int i = 1; i <= terms; i++) {
+            int prime = getNthPrime(i);
+            long fib = fibonacci(i);
+            long next = isEven(i) ? (a + b) + prime + fib : (a + b) + prime * 2 - fib;
+            series.add(next);
+            long oldB = b; b = next; a = oldB;
+        }
+        return series;
+    }
+
+    public static void printSeparator() { System.out.println("=".repeat(62)); }
+    public static void printMini()      { System.out.println("-".repeat(42)); }
+
+    public static void printTable(List<Long> series) {
+        printSeparator();
+        System.out.printf("%-6s %-13s %-10s %-10s %-8s %-6s%n",
+                "Term", "Value", "DigitSum", "Reversed", "SqRoot", "Even");
+        printSeparator();
+        for (int i = 0; i < series.size(); i++) {
+            long v = series.get(i);
+            System.out.printf("%-6d %-13d %-10d %-10d %-8d %-6s%n",
+                    i + 1, v, digitSum(v), reverseNum(v),
+                    squareRoot(v), isEven(v) ? "Yes" : "No");
+        }
+        printSeparator();
+    }
+
+    public static void printStats(List<Long> series) {
+        long sum = 0, max = Long.MIN_VALUE, min = Long.MAX_VALUE;
+        int sq = 0, even = 0;
+        for (long v : series) {
+            sum += v;
+            if (v > max) max = v;
+            if (v < min) min = v;
+            if (isPerfectSquare(v)) sq++;
+            if (isEven(v)) even++;
+        }
+        printSeparator();
+        System.out.println("  STATISTICS");
+        printSeparator();
+        System.out.printf("  Terms           : %d%n", series.size());
+        System.out.printf("  Sum             : %d%n", sum);
+        System.out.printf("  Average         : %.2f%n", (double) sum / series.size());
+        System.out.printf("  Max             : %d%n", max);
+        System.out.printf("  Min             : %d%n", min);
+        System.out.printf("  Even / Odd      : %d / %d%n", even, series.size() - even);
+        System.out.printf("  Perfect Squares : %d%n", sq);
+        System.out.printf("  Growth Rate     : %.2fx%n",
+                (double) series.get(series.size() - 1) / series.get(0));
+        printSeparator();
+    }
+
+    public static void printAnalysis(List<Long> series, int limit) {
+        System.out.println("\n  DEEP ANALYSIS (First " + limit + " Terms)");
+        for (int i = 0; i < limit && i < series.size(); i++) {
+            long v = series.get(i);
+            printMini();
+            System.out.printf("  Term %-3d | Value: %d%n", i + 1, v);
+            System.out.printf("    Digit Sum     : %d%n", digitSum(v));
+            System.out.printf("    Reversed      : %d%n", reverseNum(v));
+            System.out.printf("    Cube Root     : %d%n", cubeRoot(v));
+            System.out.printf("    Nth Prime     : %d%n", getNthPrime(i + 1));
+            System.out.printf("    Fibonacci(n)  : %d%n", fibonacci(i + 1));
+            System.out.printf("    Perfect Square: %s%n", isPerfectSquare(v) ? "Yes" : "No");
+        }
+        printMini();
+    }
+
+    public static void main(String[] args) {
+        int terms = 15;
+        printSeparator();
+        System.out.println("        SMART HYBRID NUMBER SERIES");
+        System.out.println("  Odd  step : (a+b) + prime*2 - fib(n)");
+        System.out.println("  Even step : (a+b) + prime   + fib(n)");
+        printSeparator();
+        List<Long> series = generateSeries(terms);
+        System.out.print("  Series: ");
+        for (int i = 0; i < series.size(); i++)
+            System.out.print(series.get(i) + (i < series.size() - 1 ? ", " : "\n"));
+        System.out.println();
+        printTable(series);
+        System.out.println();
+        printStats(series);
+        printAnalysis(series, 5);
+    }
+}
