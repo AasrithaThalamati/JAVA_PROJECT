@@ -1,0 +1,230 @@
+import java.util.*;
+
+class Transaction {
+    String payer;
+    double amount;
+    List<String> participants;
+
+    public Transaction(String payer, double amount, List<String> participants) {
+        this.payer = payer;
+        this.amount = amount;
+        this.participants = participants;
+    }
+}
+
+class SmartExpenseManager {
+
+    private Map<String, Double> balance = new HashMap<>();
+    private List<Transaction> history = new ArrayList<>();
+
+    // Add user
+    public void addUser(String name) {
+        if (!balance.containsKey(name)) {
+            balance.put(name, 0.0);
+            System.out.println("User added: " + name);
+        } else {
+            System.out.println("User already exists!");
+        }
+    }
+
+    // Add expense
+    public void addExpense(String payer, double amount, List<String> participants) {
+
+        if (!balance.containsKey(payer)) {
+            System.out.println("Payer not found!");
+            return;
+        }
+
+        double split = amount / participants.size();
+
+        for (String p : participants) {
+            if (!balance.containsKey(p)) {
+                System.out.println("User not found: " + p);
+                return;
+            }
+        }
+
+        for (String p : participants) {
+            if (!p.equals(payer)) {
+                balance.put(p, balance.get(p) - split);
+                balance.put(payer, balance.get(payer) + split);
+            }
+        }
+
+        history.add(new Transaction(payer, amount, participants));
+
+        System.out.println("Expense added!");
+    }
+
+    // Show balances
+    public void showBalances() {
+        System.out.println("\n--- Balances ---");
+        for (String user : balance.keySet()) {
+            double amt = balance.get(user);
+            if (amt > 0)
+                System.out.println(user + " gets ₹" + amt);
+            else if (amt < 0)
+                System.out.println(user + " owes ₹" + (-amt));
+            else
+                System.out.println(user + " is settled");
+        }
+    }
+
+    // Smart settlement (optimized)
+    public void simplifyDebts() {
+        System.out.println("\n--- Smart Settlements ---");
+
+        PriorityQueue<Map.Entry<String, Double>> creditors =
+                new PriorityQueue<>((a, b) -> Double.compare(b.getValue(), a.getValue()));
+
+        PriorityQueue<Map.Entry<String, Double>> debtors =
+                new PriorityQueue<>(Comparator.comparingDouble(Map.Entry::getValue));
+
+        for (Map.Entry<String, Double> entry : balance.entrySet()) {
+            if (entry.getValue() > 0)
+                creditors.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue()));
+            else if (entry.getValue() < 0)
+                debtors.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue()));
+        }
+
+        while (!creditors.isEmpty() && !debtors.isEmpty()) {
+
+            Map.Entry<String, Double> c = creditors.poll();
+            Map.Entry<String, Double> d = debtors.poll();
+
+            double settle = Math.min(c.getValue(), -d.getValue());
+
+            System.out.println("💸 " + d.getKey() + " pays ₹" + settle + " to " + c.getKey());
+
+            double newC = c.getValue() - settle;
+            double newD = d.getValue() + settle;
+
+            if (newC > 0)
+                creditors.add(new AbstractMap.SimpleEntry<>(c.getKey(), newC));
+            if (newD < 0)
+                debtors.add(new AbstractMap.SimpleEntry<>(d.getKey(), newD));
+        }
+    }
+
+    // Show history
+    public void showHistory() {
+        System.out.println("\n--- Expense History ---");
+
+        if (history.isEmpty()) {
+            System.out.println("No transactions yet.");
+            return;
+        }
+
+        for (Transaction t : history) {
+            System.out.println(t.payer + " paid ₹" + t.amount + " for " + t.participants);
+        }
+    }
+
+    // AI-style insights (UNIQUE FEATURE)
+    public void smartInsights() {
+        System.out.println("\n--- 🤖 Smart Insights ---");
+
+        String topSpender = "";
+        double max = Double.MIN_VALUE;
+
+        for (Transaction t : history) {
+            if (t.amount > max) {
+                max = t.amount;
+                topSpender = t.payer;
+            }
+        }
+
+        if (!topSpender.isEmpty()) {
+            System.out.println("🏆 Top spender: " + topSpender + " (₹" + max + ")");
+        }
+
+        for (String user : balance.keySet()) {
+            double amt = balance.get(user);
+            if (amt < 0) {
+                System.out.println("⚠️ " + user + " should settle debts soon!");
+            }
+        }
+
+        System.out.println("💡 Tip: Settle debts early to avoid confusion.");
+    }
+}
+
+public class CoolExpenseApp {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        SmartExpenseManager manager = new SmartExpenseManager();
+
+        int choice;
+
+        do {
+            System.out.println("\n=== 🤖 Smart Expense Splitter ===");
+            System.out.println("1. Add User");
+            System.out.println("2. Add Expense");
+            System.out.println("3. Show Balances");
+            System.out.println("4. Smart Settlement");
+            System.out.println("5. View History");
+            System.out.println("6. Smart Insights");
+            System.out.println("7. Exit");
+            System.out.print("Enter choice: ");
+
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.print("Enter user name: ");
+                    manager.addUser(sc.nextLine());
+                    break;
+
+                case 2:
+                    System.out.print("Enter payer: ");
+                    String payer = sc.nextLine();
+
+                    System.out.print("Enter amount: ");
+                    double amount = sc.nextDouble();
+                    sc.nextLine();
+
+                    System.out.print("Participants count: ");
+                    int n = sc.nextInt();
+                    sc.nextLine();
+
+                    List<String> list = new ArrayList<>();
+                    for (int i = 0; i < n; i++) {
+                        System.out.print("Enter participant " + (i + 1) + ": ");
+                        list.add(sc.nextLine());
+                    }
+
+                    manager.addExpense(payer, amount, list);
+                    break;
+
+                case 3:
+                    manager.showBalances();
+                    break;
+
+                case 4:
+                    manager.simplifyDebts();
+                    break;
+
+                case 5:
+                    manager.showHistory();
+                    break;
+
+                case 6:
+                    manager.smartInsights();
+                    break;
+
+                case 7:
+                    System.out.println("Exiting...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+
+        } while (choice != 7);
+
+        sc.close();
+    }
+}
