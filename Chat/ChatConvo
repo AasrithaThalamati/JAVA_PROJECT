@@ -1,0 +1,188 @@
+import java.io.*;
+import java.net.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+public class SmartAllInOneChat {
+
+    
+    static class ChatServer extends Thread {
+        private ServerSocket serverSocket;
+        private static Map<String, ClientHandler> clients = new HashMap<>();
+        private static List<String> history = new ArrayList<>();
+
+        public void run() {
+            try {
+                serverSocket = new ServerSocket(1234);
+                System.out.println("🚀 Server started...");
+
+                while (true) {
+                    Socket socket = serverSocket.accept();
+                    new ClientHandler(socket).start();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        static synchronized void broadcast(String msg, String sender) {
+            String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+            String full = "[" + time + "] " + sender + ": " + msg;
+
+            history.add(full);
+
+            for (ClientHandler c : clients.values()) {
+                c.send(full);
+            }
+        }
+
+        static synchronized void privateMsg(String sender, String receiver, String msg) {
+            ClientHandler r = clients.get(receiver);
+
+            if (r != null) {
+                String full = "🔒 [PRIVATE] " + sender + " → " + receiver + ": " + msg;
+                history.add(full);
+                r.send(full);
+            } else {
+                clients.get(sender).send("❌ User not found!");
+            }
+        }
+
+        static synchronized void showUsers(ClientHandler requester) {
+            requester.send("👥 Users: " + clients.keySet());
+        }
+
+        static synchronized void showHistory(ClientHandler requester) {
+            requester.send("--- 📜 History ---");
+            for (String h : history) {
+                requester.send(h);
+            }
+        }
+
+        static class ClientHandler extends Thread {
+            Socket socket;
+            BufferedReader in;
+            PrintWriter out;
+            String name;
+
+            ClientHandler(Socket socket) {
+                this.socket = socket;
+            }
+
+            public void run() {
+                try {
+                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    out = new PrintWriter(socket.getOutputStream(), true);
+
+                    out.println("Enter name:");
+                    name = in.readLine();
+
+                    while (clients.containsKey(name)) {
+                        out.println("Name taken, try again:");
+                        name = in.readLine();
+                    }
+
+                    clients.put(name, this);
+                    broadcast("joined the chat", name);
+
+                    String msg;
+
+                    while ((msg = in.readLine()) != null) {
+
+                        if (msg.equalsIgnoreCase("/exit")) break;
+
+                        else if (msg.equals("/users")) {
+                            showUsers(this);
+                        }
+
+                        else if (msg.equals("/history")) {
+                            showHistory(this);
+                        }
+
+                        else if (msg.startsWith("@")) {
+                            String[] parts = msg.split(" ", 2);
+                            if (parts.length < 2) {
+                                send("Invalid format!");
+                                continue;
+                            }
+                            String receiver = parts[0].substring(1);
+                            privateMsg(name, receiver, parts[1]);
+                        }
+
+                        else {
+                            broadcast(msg, name);
+                        }
+                    }
+
+                    clients.remove(name);
+                    broadcast("left the chat", name);
+                    socket.close();
+
+                } catch (IOException e) {
+                    System.out.println("Error.");
+                }
+            }
+
+            void send(String msg) {
+                out.println(msg);
+            }
+        }
+    }
+    static class ChatClient extends Thread {
+        String name;
+
+        ChatClient(String name) {
+            this.name = name;
+        }
+
+        public void run() {
+            try {
+                Socket socket = new Socket("localhost", 1234);
+
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(socket.getInputStream()));
+                PrintWriter out = new PrintWriter(
+                        socket.getOutputStream(), true);
+
+                Scanner sc = new Scanner(System.in);
+                new Thread(() -> {
+                    try {
+                        String msg;
+                        while ((msg = in.readLine()) != null) {
+                            System.out.println("[" + name + "] " + msg);
+                        }
+                    } catch (IOException e) {}
+                }).start();
+
+                out.println(name);
+
+                while (true) {
+                    System.out.print(name + " > ");
+                    String msg = sc.nextLine();
+                    out.println(msg);
+
+                    if (msg.equalsIgnoreCase("/exit")) break;
+                }
+
+                socket.close();
+
+            } catch (IOException e) {
+                System.out.println("Client error");
+            }
+        }
+    }
+    public static void main(String[] args) throws Exception {
+
+        ChatServer server = new ChatServer();
+        server.start();
+
+        Thread.sleep(1000);
+
+        ChatClient c1 = new ChatClient("A");
+        ChatClient c2 = new ChatClient("B");
+
+        c1.start();
+        c2.start();
+    }
+}
