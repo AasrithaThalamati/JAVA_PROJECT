@@ -1,0 +1,83 @@
+import java.util.*;
+
+class Order {
+    private List<String> items = new ArrayList<>();
+    private int total = 0;
+
+    public void addItem(String item, int price) {
+        items.add(item);
+        total += price;
+    }
+
+    public void displayOrder() {
+        if (items.isEmpty()) {
+            System.out.println("No items ordered.");
+            return;
+        }
+
+        System.out.println("\n--- Your Order ---");
+        for (String item : items) {
+            System.out.println(item);
+        }
+        System.out.println("Total Bill: ₹" + total);
+    }
+}
+
+public class FoodOrderingSystem {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Order order = new Order();
+
+        int choice;
+
+        do {
+            System.out.println("\n--- MENU ---");
+            System.out.println("1. Burger - ₹100");
+            System.out.println("2. Pizza - ₹200");
+            System.out.println("3. Sandwich - ₹80");
+            System.out.println("4. Coffee - ₹50");
+            System.out.println("5. View Order");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    order.addItem("Burger - ₹100", 100);
+                    System.out.println("Burger added!");
+                    break;
+
+                case 2:
+                    order.addItem("Pizza - ₹200", 200);
+                    System.out.println("Pizza added!");
+                    break;
+
+                case 3:
+                    order.addItem("Sandwich - ₹80", 80);
+                    System.out.println("Sandwich added!");
+                    break;
+
+                case 4:
+                    order.addItem("Coffee - ₹50", 50);
+                    System.out.println("Coffee added!");
+                    break;
+
+                case 5:
+                    order.displayOrder();
+                    break;
+
+                case 6:
+                    System.out.println("Thank you for ordering!");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+
+        } while (choice != 6);
+
+        sc.close();
+    }
+}
