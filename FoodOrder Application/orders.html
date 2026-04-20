@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ForkIt — My Orders</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-brand">🍴 ForkIt</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="orders.html" class="active">My Orders</a>
+    </div>
+    <button class="cart-btn" onclick="window.location='index.html'">
+      🛒 Order More
+    </button>
+  </nav>
+
+  <section class="page-hero">
+    <h1>My Orders</h1>
+    <p>Track all your placed orders in real time</p>
+  </section>
+
+  <section class="orders-section">
+    <div class="orders-toolbar">
+      <div class="filter-pills">
+        <button class="pill active" onclick="filterOrders('All', this)">All</button>
+        <button class="pill" onclick="filterOrders('Pending', this)">Pending</button>
+        <button class="pill" onclick="filterOrders('Preparing', this)">Preparing</button>
+        <button class="pill" onclick="filterOrders('Out for Delivery', this)">Out for Delivery</button>
+        <button class="pill" onclick="filterOrders('Delivered', this)">Delivered</button>
+        <button class="pill" onclick="filterOrders('Cancelled', this)">Cancelled</button>
+      </div>
+      <button class="clear-btn" onclick="clearAllOrders()">🗑 Clear All</button>
+    </div>
+
+    <div id="ordersList" class="orders-list"></div>
+  </section>
+
+  <!-- ORDER DETAIL MODAL -->
+  <div class="modal-overlay" id="orderDetailModal">
+    <div class="modal order-detail-modal">
+      <button class="modal-close" onclick="closeOrderDetail()">✕</button>
+      <div id="orderDetailContent"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', renderOrders);
+  </script>
+</body>
+</html>
