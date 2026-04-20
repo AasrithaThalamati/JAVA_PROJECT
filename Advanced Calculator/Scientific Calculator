@@ -1,0 +1,183 @@
+import java.util.*;
+
+class ScientificCalculator {
+
+    
+    double add(double a, double b) { return a + b; }
+    double sub(double a, double b) { return a - b; }
+    double mul(double a, double b) { return a * b; }
+
+    double div(double a, double b) {
+        if (b == 0) throw new ArithmeticException("Divide by zero!");
+        return a / b;
+    }
+
+    double power(double a, double b) { return Math.pow(a, b); }
+    double sqrt(double a) {
+        if (a < 0) throw new ArithmeticException("Negative input!");
+        return Math.sqrt(a);
+    }
+
+    double mod(double a, double b) { return a % b; }
+
+    double sin(double a) { return Math.sin(Math.toRadians(a)); }
+    double cos(double a) { return Math.cos(Math.toRadians(a)); }
+    double tan(double a) { return Math.tan(Math.toRadians(a)); }
+
+    double log(double a) {
+        if (a <= 0) throw new ArithmeticException("Invalid input for log!");
+        return Math.log10(a);
+    }
+
+    double ln(double a) {
+        if (a <= 0) throw new ArithmeticException("Invalid input for ln!");
+        return Math.log(a);
+    }
+
+    long factorial(int n) {
+        if (n < 0) throw new ArithmeticException("Negative factorial!");
+        long fact = 1;
+        for (int i = 1; i <= n; i++) fact *= i;
+        return fact;
+    }
+}
+
+public class ScientificCalculatorApp {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ScientificCalculator calc = new ScientificCalculator();
+
+        int choice;
+
+        do {
+            System.out.println("\n=== 🧮 Scientific Calculator ===");
+            System.out.println("1. Add");
+            System.out.println("2. Subtract");
+            System.out.println("3. Multiply");
+            System.out.println("4. Divide");
+            System.out.println("5. Power");
+            System.out.println("6. Square Root");
+            System.out.println("7. Modulus");
+            System.out.println("8. Sin");
+            System.out.println("9. Cos");
+            System.out.println("10. Tan");
+            System.out.println("11. Log (base 10)");
+            System.out.println("12. Ln (natural log)");
+            System.out.println("13. Factorial");
+            System.out.println("14. Exit");
+            System.out.print("Enter choice: ");
+
+            while (!sc.hasNextInt()) {
+                System.out.println("Invalid input!");
+                sc.next();
+            }
+
+            choice = sc.nextInt();
+
+            try {
+                double a, b;
+
+                switch (choice) {
+
+                    case 1:
+                        System.out.print("Enter two numbers: ");
+                        a = sc.nextDouble();
+                        b = sc.nextDouble();
+                        System.out.println("Result: " + calc.add(a, b));
+                        break;
+
+                    case 2:
+                        System.out.print("Enter two numbers: ");
+                        a = sc.nextDouble();
+                        b = sc.nextDouble();
+                        System.out.println("Result: " + calc.sub(a, b));
+                        break;
+
+                    case 3:
+                        System.out.print("Enter two numbers: ");
+                        a = sc.nextDouble();
+                        b = sc.nextDouble();
+                        System.out.println("Result: " + calc.mul(a, b));
+                        break;
+
+                    case 4:
+                        System.out.print("Enter two numbers: ");
+                        a = sc.nextDouble();
+                        b = sc.nextDouble();
+                        System.out.println("Result: " + calc.div(a, b));
+                        break;
+
+                    case 5:
+                        System.out.print("Enter base and exponent: ");
+                        a = sc.nextDouble();
+                        b = sc.nextDouble();
+                        System.out.println("Result: " + calc.power(a, b));
+                        break;
+
+                    case 6:
+                        System.out.print("Enter number: ");
+                        a = sc.nextDouble();
+                        System.out.println("Result: " + calc.sqrt(a));
+                        break;
+
+                    case 7:
+                        System.out.print("Enter two numbers: ");
+                        a = sc.nextDouble();
+                        b = sc.nextDouble();
+                        System.out.println("Result: " + calc.mod(a, b));
+                        break;
+
+                    case 8:
+                        System.out.print("Enter angle (degrees): ");
+                        a = sc.nextDouble();
+                        System.out.println("sin: " + calc.sin(a));
+                        break;
+
+                    case 9:
+                        System.out.print("Enter angle (degrees): ");
+                        a = sc.nextDouble();
+                        System.out.println("cos: " + calc.cos(a));
+                        break;
+
+                    case 10:
+                        System.out.print("Enter angle (degrees): ");
+                        a = sc.nextDouble();
+                        System.out.println("tan: " + calc.tan(a));
+                        break;
+
+                    case 11:
+                        System.out.print("Enter number: ");
+                        a = sc.nextDouble();
+                        System.out.println("log: " + calc.log(a));
+                        break;
+
+                    case 12:
+                        System.out.print("Enter number: ");
+                        a = sc.nextDouble();
+                        System.out.println("ln: " + calc.ln(a));
+                        break;
+
+                    case 13:
+                        System.out.print("Enter integer: ");
+                        int n = sc.nextInt();
+                        System.out.println("Factorial: " + calc.factorial(n));
+                        break;
+
+                    case 14:
+                        System.out.println("Exiting...");
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice!");
+                }
+
+            } catch (ArithmeticException e) {
+                System.out.println("⚠️ Error: " + e.getMessage());
+            }
+
+        } while (choice != 14);
+
+        sc.close();
+    }
+}
