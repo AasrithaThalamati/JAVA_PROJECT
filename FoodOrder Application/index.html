@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ForkIt — Food Ordering</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-brand">🍴 ForkIt</div>
+    <div class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="orders.html">My Orders</a>
+    </div>
+    <button class="cart-btn" onclick="openCart()">
+      🛒 Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Hungry?<br/><span>We got you.</span></h1>
+      <p>Discover the best local restaurants and get food delivered fast.</p>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search restaurants or cuisines…" oninput="filterRestaurants()"/>
+        <button onclick="filterRestaurants()">Search</button>
+      </div>
+    </div>
+    <div class="hero-illustration">🍕🍜🍣🌮</div>
+  </section>
+
+  <!-- CUISINE FILTERS -->
+  <section class="filters-section">
+    <div class="filter-chips" id="filterChips">
+      <button class="chip active" onclick="setCuisine('All', this)">All</button>
+      <button class="chip" onclick="setCuisine('Italian', this)">🍕 Italian</button>
+      <button class="chip" onclick="setCuisine('Asian', this)">🍜 Asian</button>
+      <button class="chip" onclick="setCuisine('Mexican', this)">🌮 Mexican</button>
+      <button class="chip" onclick="setCuisine('Indian', this)">🍛 Indian</button>
+      <button class="chip" onclick="setCuisine('American', this)">🍔 American</button>
+      <button class="chip" onclick="setCuisine('Desserts', this)">🍰 Desserts</button>
+    </div>
+  </section>
+
+  <!-- RESTAURANTS GRID -->
+  <section class="restaurants-section">
+    <h2>Restaurants Near You</h2>
+    <div class="restaurant-grid" id="restaurantGrid"></div>
+  </section>
+
+  <!-- MENU MODAL -->
+  <div class="modal-overlay" id="menuModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeMenu()">✕</button>
+      <div class="modal-header" id="modalHeader"></div>
+      <div class="menu-categories" id="menuCategories"></div>
+      <div class="menu-items" id="menuItems"></div>
+      <div class="modal-footer">
+        <button class="view-cart-btn" onclick="openCart()">View Cart <span id="modalCartCount">0</span> items</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART DRAWER -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="empty-cart">Your cart is empty 🛒</div>
+    </div>
+    <div class="cart-summary" id="cartSummary" style="display:none">
+      <div class="summary-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+      <div class="summary-row"><span>Delivery Fee</span><span>₹30</span></div>
+      <div class="summary-row total"><span>Total</span><span id="totalAmount">₹0</span></div>
+      <button class="place-order-btn" onclick="openCheckout()">Proceed to Checkout →</button>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal checkout-modal">
+      <button class="modal-close" onclick="closeCheckout()">✕</button>
+      <h2>Checkout</h2>
+      <div class="checkout-form">
+        <label>Full Name</label>
+        <input type="text" id="custName" placeholder="John Doe" />
+        <label>Phone Number</label>
+        <input type="tel" id="custPhone" placeholder="+91 9876543210" />
+        <label>Delivery Address</label>
+        <textarea id="custAddress" placeholder="House No, Street, City…" rows="3"></textarea>
+        <label>Payment Method</label>
+        <div class="payment-options">
+          <label class="pay-opt"><input type="radio" name="pay" value="COD" checked/> Cash on Delivery</label>
+          <label class="pay-opt"><input type="radio" name="pay" value="UPI"/> UPI</label>
+          <label class="pay-opt"><input type="radio" name="pay" value="Card"/> Card</label>
+        </div>
+      </div>
+      <div class="checkout-total">
+        Total: <strong id="checkoutTotal">₹0</strong>
+      </div>
+      <button class="place-order-btn" onclick="placeOrder()">Place Order 🎉</button>
+    </div>
+  </div>
+
+  <!-- ORDER SUCCESS -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal success-modal">
+      <div class="success-icon">🎉</div>
+      <h2>Order Placed!</h2>
+      <p id="successMsg">Your order has been placed successfully.</p>
+      <p class="order-id-display">Order ID: <strong id="displayOrderId"></strong></p>
+      <button class="place-order-btn" onclick="viewOrders()">Track Order →</button>
+      <button class="secondary-btn" onclick="closeSuccess()">Continue Ordering</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
