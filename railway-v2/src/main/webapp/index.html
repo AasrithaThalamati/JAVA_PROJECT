@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RailConnect Pro — Indian Railway Reservation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Animated background tracks -->
+<div class="bg-tracks" aria-hidden="true">
+  <div class="track t1"></div><div class="track t2"></div>
+  <div class="track t3"></div><div class="track t4"></div>
+  <div class="particle p1"></div><div class="particle p2"></div>
+  <div class="particle p3"></div><div class="particle p4"></div>
+  <div class="particle p5"></div>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="container">
+    <div class="logo">
+      <div class="logo-emblem">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <rect x="4" y="22" width="28" height="6" rx="2" fill="#C8A84B"/>
+          <rect x="7" y="14" width="22" height="10" rx="3" fill="#C8A84B" opacity=".85"/>
+          <rect x="10" y="8" width="16" height="8" rx="3" fill="#C8A84B" opacity=".7"/>
+          <circle cx="10" cy="28" r="3" fill="#1a1a2e"/><circle cx="10" cy="28" r="1.5" fill="#C8A84B"/>
+          <circle cx="26" cy="28" r="3" fill="#1a1a2e"/><circle cx="26" cy="28" r="1.5" fill="#C8A84B"/>
+          <rect x="12" y="16" width="5" height="4" rx="1" fill="#1a1a2e" opacity=".6"/>
+          <rect x="19" y="16" width="5" height="4" rx="1" fill="#1a1a2e" opacity=".6"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-name">RailConnect <span>Pro</span></div>
+        <div class="logo-tag">Indian Railway Reservation System</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="live-dot"></div>
+      <span class="live-label">LIVE</span>
+      <div class="header-divider"></div>
+      <div class="header-clock" id="header-clock">--:--:--</div>
+    </div>
+  </div>
+</header>
+
+<!-- Hero strip -->
+<div class="hero-strip">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <h1>Where will you travel<br><em>next?</em></h1>
+      <p>Seamless bookings. Instant confirmations. Pan-India coverage.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">8</span><span class="stat-lbl">Trains</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><span class="stat-num">12</span><span class="stat-lbl">Cities</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><span class="stat-num">4</span><span class="stat-lbl">Classes</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <button class="nav-btn active" data-section="book" onclick="showSection('book')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Book Ticket
+    </button>
+    <button class="nav-btn" data-section="cancel" onclick="showSection('cancel')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      Cancel Ticket
+    </button>
+    <button class="nav-btn" data-section="seats" onclick="showSection('seats')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 9V7a2 2 0 00-2-2H6a2 2 0 00-2 2v2"/><path d="M4 9h16v6H4z"/><path d="M8 15v4"/><path d="M16 15v4"/><path d="M6 19h12"/></svg>
+      View Seats
+    </button>
+    <div class="nav-indicator"></div>
+  </div>
+</nav>
+
+<!-- ==================== BOOK TICKET ==================== -->
+<section id="section-book" class="section active">
+<div class="container section-inner">
+
+  <!-- Search Panel -->
+  <div class="panel" id="panel-search">
+    <div class="panel-head">
+      <div class="panel-icon gold">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <div><div class="panel-title">Search Trains</div><div class="panel-sub">Find available trains on your route</div></div>
+    </div>
+    <div class="form-grid three">
+      <div class="field">
+        <label>From</label>
+        <div class="select-wrap">
+          <select id="book-from">
+            <option value="">Origin Station</option>
+            <option>New Delhi</option><option>Mumbai</option><option>Kolkata</option>
+            <option>Chennai</option><option>Hyderabad</option><option>Bangalore</option>
+            <option>Pune</option><option>Ahmedabad</option><option>Lucknow</option>
+          </select>
+          <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="swap-btn-wrap">
+        <button class="swap-btn" onclick="swapStations()" title="Swap stations">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 16V4m0 0L3 8m4-4 4 4"/><path d="M17 8v12m0 0 4-4m-4 4-4-4"/></svg>
+        </button>
+      </div>
+      <div class="field">
+        <label>To</label>
+        <div class="select-wrap">
+          <select id="book-to">
+            <option value="">Destination Station</option>
+            <option>New Delhi</option><option>Mumbai</option><option>Kolkata</option>
+            <option>Chennai</option><option>Hyderabad</option><option>Bangalore</option>
+            <option>Pune</option><option>Ahmedabad</option><option>Lucknow</option>
+          </select>
+          <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="form-grid two">
+      <div class="field">
+        <label>Travel Date</label>
+        <input type="date" id="book-date">
+      </div>
+      <div class="field">
+        <label>Class Preference</label>
+        <div class="select-wrap">
+          <select id="pref-class">
+            <option>Any Class</option>
+            <option>Sleeper</option><option>AC 3-Tier</option>
+            <option>AC 2-Tier</option><option>AC First Class</option>
+          </select>
+          <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-gold" onclick="searchTrains()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Search Trains
+      </button>
+    </div>
+  </div>
+
+  <!-- Train Results -->
+  <div id="train-results-wrap" class="hidden"></div>
+
+  <!-- Passenger Form -->
+  <div class="panel hidden" id="panel-passenger">
+    <div class="panel-head">
+      <div class="panel-icon blue">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div><div class="panel-title">Passenger Details</div><div class="panel-sub">Enter traveller information</div></div>
+    </div>
+    <div id="selected-train-strip"></div>
+    <div class="form-grid three">
+      <div class="field" style="grid-column:1/3">
+        <label>Full Name <span class="req">*</span></label>
+        <input type="text" id="p-name" placeholder="As on government ID" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Age <span class="req">*</span></label>
+        <input type="number" id="p-age" placeholder="e.g. 28" min="1" max="120">
+      </div>
+    </div>
+    <div class="form-grid three">
+      <div class="field">
+        <label>Gender</label>
+        <div class="select-wrap">
+          <select id="p-gender">
+            <option>Male</option><option>Female</option><option>Other</option>
+          </select>
+          <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="field" style="grid-column:2/4">
+        <label>Travel Class</label>
+        <div class="class-selector" id="class-selector">
+          <button class="class-opt active" data-class="Sleeper">Sleeper<span>SL</span></button>
+          <button class="class-opt" data-class="AC 3-Tier">AC 3-Tier<span>3A</span></button>
+          <button class="class-opt" data-class="AC 2-Tier">AC 2-Tier<span>2A</span></button>
+          <button class="class-opt" data-class="AC First Class">First Class<span>1A</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="fare-preview" id="fare-preview"></div>
+    <div class="actions split">
+      <button class="btn-ghost" onclick="resetToSearch()">← Back to Search</button>
+      <button class="btn-gold" onclick="bookTicket()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+        Confirm Booking
+      </button>
+    </div>
+  </div>
+
+  <!-- Booking Success -->
+  <div class="panel hidden" id="panel-success">
+    <div class="success-header">
+      <div class="success-ring">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0d9e5c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div>
+        <div class="success-title">Booking Confirmed!</div>
+        <div class="success-sub">Your ticket has been reserved successfully</div>
+      </div>
+    </div>
+    <div id="ticket-card"></div>
+    <div class="actions">
+      <button class="btn-ghost" onclick="resetBooking()">Book Another Ticket</button>
+      <button class="btn-gold" onclick="printTicket()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print Ticket
+      </button>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ==================== CANCEL TICKET ==================== -->
+<section id="section-cancel" class="section hidden">
+<div class="container section-inner">
+
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-icon red">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      </div>
+      <div><div class="panel-title">Cancel Ticket</div><div class="panel-sub">Enter your PNR number to proceed</div></div>
+    </div>
+    <div class="form-grid two">
+      <div class="field" style="grid-column:1/3">
+        <label>PNR / Ticket ID</label>
+        <div class="pnr-input-wrap">
+          <input type="text" id="cancel-pnr" placeholder="e.g. PNR2001" style="text-transform:uppercase;letter-spacing:2px">
+          <button class="btn-gold inline" onclick="fetchForCancel()">Fetch Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Preview -->
+  <div class="panel hidden" id="panel-cancel-preview">
+    <div class="panel-head">
+      <div class="panel-icon red">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div><div class="panel-title">Ticket Details</div><div class="panel-sub">Review before cancellation</div></div>
+    </div>
+    <div id="cancel-ticket-card"></div>
+    <div class="warn-banner">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Cancellation is irreversible. Refund will be processed in 5–7 business days.
+    </div>
+    <div class="actions split">
+      <button class="btn-ghost" onclick="clearCancel()">← Go Back</button>
+      <button class="btn-danger" id="confirm-cancel-btn" onclick="confirmCancel()">Cancel This Ticket</button>
+    </div>
+  </div>
+
+  <!-- Cancel Success -->
+  <div class="panel hidden" id="panel-cancel-done">
+    <div class="success-header">
+      <div class="success-ring cancelled">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e05252" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div>
+        <div class="success-title">Ticket Cancelled</div>
+        <div class="success-sub">Refund initiated to original payment method</div>
+      </div>
+    </div>
+    <div class="refund-info">
+      <div class="refund-row"><span>Status</span><span class="badge-cancelled">CANCELLED</span></div>
+      <div class="refund-row"><span>Refund ETA</span><span>5–7 Business Days</span></div>
+    </div>
+    <div class="actions"><button class="btn-ghost" onclick="clearCancel()">Cancel Another Ticket</button></div>
+  </div>
+
+</div>
+</section>
+
+<!-- ==================== VIEW SEATS ==================== -->
+<section id="section-seats" class="section hidden">
+<div class="container section-inner">
+
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-icon teal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 9V7a2 2 0 00-2-2H6a2 2 0 00-2 2v2"/><path d="M4 9h16v6H4z"/><path d="M8 15v4"/><path d="M16 15v4"/><path d="M6 19h12"/></svg>
+      </div>
+      <div><div class="panel-title">Seat Availability</div><div class="panel-sub">Live seat map for any train</div></div>
+    </div>
+    <div class="form-grid two">
+      <div class="field" style="grid-column:1/3">
+        <label>Select Train</label>
+        <div class="select-wrap">
+          <select id="seats-select">
+            <option value="">— Choose a train —</option>
+          </select>
+          <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-gold" onclick="loadSeats()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        View Seat Map
+      </button>
+    </div>
+  </div>
+
+  <div id="seat-map-wrap" class="hidden"></div>
+
+</div>
+</section>
+
+<!-- Toast -->
+<div id="toast-container"></div>
+
+<!-- Print overlay -->
+<div id="print-area" class="hidden"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
